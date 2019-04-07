@@ -1,0 +1,23 @@
+{
+  "name": "replex",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codetraceio/replex.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codetraceio/replex/issues"
+  },
+  "homepage": "https://github.com/codetraceio/replex#readme",
+  "devDependencies": {
+    "jest": "^24.7.1",
+    "typescript": "^3.4.2"
+  }
+}
