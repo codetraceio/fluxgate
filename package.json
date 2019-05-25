@@ -1,23 +1,36 @@
 {
-  "name": "replex",
-  "version": "0.0.1",
+  "name": "rex-store",
+  "version": "0.0.2",
   "description": "",
   "main": "dist/index.js",
+  "typings": "typescript/index.d.ts",
   "scripts": {
+    "build": "./build.sh",
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codetraceio/replex.git"
+    "url": "git+https://github.com/codetraceio/rex.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/codetraceio/replex/issues"
+    "url": "https://github.com/codetraceio/rex/issues"
   },
-  "homepage": "https://github.com/codetraceio/replex#readme",
+  "homepage": "https://github.com/codetraceio/rex#readme",
   "devDependencies": {
+    "@types/events": "^1.2.0",
     "jest": "^24.7.1",
+    "ts-jest": "^24.0.2",
     "typescript": "^3.4.2"
+  },
+  "dependencies": {
+    "@types/jest": "^24.0.13",
+    "events": "^3.0.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    }
   }
 }
