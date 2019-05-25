@@ -10,5 +10,8 @@ export interface IStore<S extends {
     getState(): S;
 }
 export interface IReducerMap {
-    [key: string]: (...data: any[]) => Promise<any>;
+    [key: string]: (...data: any[]) => any;
 }
+export declare type IActionMap<T> = {
+    [key in keyof T]: (...data: any[]) => void;
+};

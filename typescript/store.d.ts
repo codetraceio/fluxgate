@@ -1,6 +1,6 @@
-import { IStore, IEmitter } from "./interfaces";
+import { IStore, IEmitter, IReducerMap, IActionMap } from "./interfaces";
 export declare const EVENT_CHANGE = "change";
 export declare function createStore<S extends {
     [key: string]: any;
 }>(defaultState: S): IStore<S>;
-export declare function createAction(emitter: IEmitter, key: string, reducer: (...data: any[]) => void): (...data: any[]) => void;
+export declare function createActions<T extends IReducerMap>(emitter: IEmitter, reducerMap: T): IActionMap<T>;
