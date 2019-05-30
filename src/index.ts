@@ -1,2 +1,8 @@
-export { createStore, createActions } from "./store";
-export { createEmitter } from "./emitter";
+export {
+  createStore,
+  createActions,
+  EVENT_CHANGE,
+} from "./store";
+export {
+  createEmitter,
+} from "./emitter";
