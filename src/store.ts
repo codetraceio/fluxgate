@@ -14,7 +14,7 @@ export function createStore<S extends {[key: string]: any}>(defaultState: S): IS
     if (typeof updater === "object" && typeof state === "object") {
       state = ({...state, ...updater});
     }
-    emitter.emit(EVENT_CHANGE);
+    emitter.emit(EVENT_CHANGE, state);
   }
 
   function getState() {
