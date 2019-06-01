@@ -20,12 +20,12 @@
   "homepage": "https://github.com/codetraceio/rex#readme",
   "devDependencies": {
     "@types/events": "^1.2.0",
+    "@types/jest": "^24.0.13",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",
     "typescript": "^3.4.2"
   },
   "dependencies": {
-    "@types/jest": "^24.0.13",
     "events": "^3.0.0"
   },
   "jest": {
