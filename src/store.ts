@@ -49,7 +49,7 @@ function createAction<T>(
     }
   });
   return (...data: any[]) => {
-    store.emit(key, data);
+    store.emit(key, ...data);
     return new Promise((resolve) => {
       store.on(`${key}.done`, () => {
         resolve();
