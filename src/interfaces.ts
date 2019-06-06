@@ -14,5 +14,5 @@ export interface IReducerMap {
 }
 
 export type IActionMap<T> = {
-  [key in keyof T]: (...data: any[]) => void;
+  [key in keyof T]: (...data: any[]) => Promise<void>;
 }
