@@ -1,13 +1,19 @@
 import { IStore, IEmitter, IReducerMap, IActionMap } from "./interfaces";
+import { getConfig } from "./config";
 
 export const EVENT_CHANGE = "change";
 
 export function createStore<S extends {[key: string]: any}>(
   emitter: IEmitter,
   defaultState: S,
+  storeName?: string,
 ): IStore<S> {
+  let backendState: S = {} as S;
+  if (!getConfig().isBackend && storeName) {
+    backendState = (window as any).__rexStores__ && (window as any).__rexStores__[storeName] || {};
+  }
 
-  let state = {...defaultState};
+  let state = {...defaultState, ...backendState};
 
   function setState(updater: S | ((state: S) => S)) {
     if (typeof updater === "function") {

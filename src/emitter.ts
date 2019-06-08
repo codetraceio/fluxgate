@@ -1,8 +1,17 @@
 import { EventEmitter } from "events";
 
 import { IEmitter } from "./interfaces";
+import { getConfig } from "./config";
 
 export function createEmitter(): IEmitter {
+  if (getConfig().isBackend) {
+    return {
+      emit: () => {},
+      on: () => {},
+      off: () => {},
+    }
+  }
+
   const emitter = new EventEmitter();
 
   function emit(event: string, ...data: any[]) {
