@@ -1,7 +1,6 @@
 export {
   createStore,
   createActions,
-  EVENT_CHANGE,
 } from "./store";
 export {
   createEmitter,
@@ -10,3 +9,8 @@ export {
   setConfig,
   getConfig,
 } from "./config";
+export {
+  loadingEvent,
+  completedEvent,
+  CHANGE_EVENT,
+} from "./events";

@@ -1,7 +1,6 @@
 import { IStore, IEmitter, IReducerMap, IActionMap } from "./interfaces";
 import { getConfig } from "./config";
-
-export const EVENT_CHANGE = "change";
+import { loadingEvent, completedEvent, CHANGE_EVENT } from "./events";
 
 export function createStore<S extends {[key: string]: any}>(
   emitter: IEmitter,
@@ -22,7 +21,7 @@ export function createStore<S extends {[key: string]: any}>(
     if (typeof updater === "object" && typeof state === "object") {
       state = ({...state, ...updater});
     }
-    emitter.emit(EVENT_CHANGE, state);
+    emitter.emit(CHANGE_EVENT, state);
   }
 
   function getState() {
@@ -46,18 +45,18 @@ function createAction<T>(
   store.on(key, (...data: any[]) => {
     const promise = reducer(...data);
     if (promise instanceof Promise) {
-      store.emit(`${key}.loading`);
+      store.emit(loadingEvent(key));
       promise.then(() => {
-        store.emit(`${key}.done`);
+        store.emit(completedEvent(key));
       });
     } else {
-      store.emit(`${key}.done`);
+      store.emit(completedEvent(key));
     }
   });
   return (...data: any[]) => {
     store.emit(key, ...data);
     return new Promise<void>((resolve) => {
-      store.on(`${key}.done`, () => {
+      store.on(completedEvent(key), () => {
         resolve();
       });
     });
@@ -66,8 +65,8 @@ function createAction<T>(
 
 export function createActions<T extends IReducerMap, S>(store: IStore<S>, reducerMap: T): IActionMap<T> {
   const actionMap: IActionMap<T> = {} as IActionMap<T>;
-  Object.keys(reducerMap).forEach((key: string) => {
-    actionMap[key] = createAction(store, key, reducerMap[key]);
+  Object.keys(reducerMap).forEach((key: keyof T) => {
+    actionMap[key] = createAction(store, key as string, reducerMap[key]);
   });
   return actionMap;
 }

@@ -19,23 +19,23 @@ const exampleData = {aaa: "bbb"};
 const exampleFunction = () => {};
 const exampleEvent = "change";
 
-describe("emmiter", () => {
+describe("emitter", () => {
   describe("createEmitter", () => {
     it("on", () => {
-      const emmiter = createEmitter();
-      emmiter.on(exampleEvent, exampleFunction);
+      const emitter = createEmitter();
+      emitter.on(exampleEvent, exampleFunction);
       expect(addListener).toHaveBeenCalledWith(exampleEvent, exampleFunction);
     });
 
     it("off", () => {
-      const emmiter = createEmitter();
-      emmiter.off(exampleEvent, exampleFunction);
+      const emitter = createEmitter();
+      emitter.off(exampleEvent, exampleFunction);
       expect(removeListener).toHaveBeenCalledWith(exampleEvent, exampleFunction);
     });
 
     it("emit", () => {
-      const emmiter = createEmitter();
-      emmiter.emit(exampleEvent, exampleData);
+      const emitter = createEmitter();
+      emitter.emit(exampleEvent, exampleData);
       expect(emit).toHaveBeenCalledWith(exampleEvent, exampleData);
     });
   });
