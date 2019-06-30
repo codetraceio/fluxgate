@@ -7,3 +7,7 @@ export function loadingEvent(key: string) {
 export function completedEvent(key: string) {
   return `${key}.completed`;
 }
+
+export function failedEvent(key: string) {
+  return `${key}.failed`;
+}

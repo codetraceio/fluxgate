@@ -1,6 +1,6 @@
 import { IStore, IEmitter, IReducerMap, IActionMap } from "./interfaces";
 import { getConfig } from "./config";
-import { loadingEvent, completedEvent, CHANGE_EVENT } from "./events";
+import { loadingEvent, completedEvent, CHANGE_EVENT, failedEvent } from "./events";
 
 export function createStore<S extends {[key: string]: any}>(
   emitter: IEmitter,
@@ -46,27 +46,39 @@ function createAction<T>(
     const promise = reducer(...data);
     if (promise instanceof Promise) {
       store.emit(loadingEvent(key));
-      promise.then(() => {
-        store.emit(completedEvent(key));
+      promise.then((result) => {
+        store.emit(completedEvent(key), result);
+      }).catch((e) => {
+        store.emit(failedEvent(key), e);
       });
     } else {
-      store.emit(completedEvent(key));
+      store.emit(completedEvent(key), promise);
     }
   });
-  return (...data: any[]) => {
+
+  const action = (...data: any[]) => {
     store.emit(key, ...data);
-    return new Promise<void>((resolve) => {
-      store.on(completedEvent(key), () => {
-        resolve();
+    return new Promise<any>((resolve, reject) => {
+      store.on(completedEvent(key), (result) => {
+        resolve(result);
+      });
+      store.on(failedEvent(key), (e) => {
+        reject(e);
       });
     });
   };
+
+  Object.defineProperty(action, "name", {
+    value: key,
+  });
+
+  return action;
 }
 
 export function createActions<T extends IReducerMap, S>(store: IStore<S>, reducerMap: T): IActionMap<T> {
   const actionMap: IActionMap<T> = {} as IActionMap<T>;
   Object.keys(reducerMap).forEach((key: keyof T) => {
-    actionMap[key] = createAction(store, key as string, reducerMap[key]);
+    actionMap[key] = createAction<S>(store, key as string, reducerMap[key]);
   });
   return actionMap;
 }

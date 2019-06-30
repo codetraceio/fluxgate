@@ -12,5 +12,6 @@ export {
 export {
   loadingEvent,
   completedEvent,
+  failedEvent,
   CHANGE_EVENT,
 } from "./events";
