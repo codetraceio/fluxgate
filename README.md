@@ -1,8 +1,10 @@
-# Rex
+# Rex - A very simple store 
 
-## A very simple store 
+## Aritecture
 
-### Usage example
+Rex consists of 2 main parts - *sotore* and *actions*. *Store* - contains the data and changes the data, *actions* are triggering store change. Store and actions are connected with an *event emitter*.
+
+## Usage example
 
 ```
 import { createStore, createEmitter, createActions } from "rex-store";
