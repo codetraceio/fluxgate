@@ -2,7 +2,7 @@
 
 ## Aritecture
 
-Rex consists of 2 main parts - *sotore* and *actions*. *Store* - contains the data and changes the data, *actions* are triggering store change. Store and actions are connected with an *event emitter*.
+Rex consists of 2 main parts - **sotore** and **actions**. **Store** - contains the data and changes the data, **actions** are triggering store change. Store and actions are connected with an **event emitter**.
 
 ## Usage example
 
