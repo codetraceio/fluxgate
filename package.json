@@ -1,6 +1,6 @@
 {
-  "name": "rex-store",
-  "version": "0.1.3",
+  "name": "fluxgate",
+  "version": "0.2.0",
   "description": "",
   "main": "dist/index.js",
   "typings": "typescript/index.d.ts",
@@ -10,23 +10,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codetraceio/rex.git"
+    "url": "git+https://github.com/codetraceio/fluxgate.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/codetraceio/rex/issues"
+    "url": "https://github.com/codetraceio/fluxgate/issues"
   },
-  "homepage": "https://github.com/codetraceio/rex#readme",
+  "homepage": "https://github.com/codetraceio/fluxgate#readme",
   "devDependencies": {
-    "@types/events": "^1.2.0",
-    "@types/jest": "^24.0.13",
-    "jest": "^24.7.1",
-    "ts-jest": "^24.0.2",
-    "typescript": "^3.4.2"
+    "@types/events": "^3.0.0",
+    "@types/jest": "^26.0.3",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.1",
+    "typescript": "^3.9.6"
   },
   "dependencies": {
-    "events": "^3.0.0"
+    "events": "^3.1.0"
   },
   "jest": {
     "transform": {

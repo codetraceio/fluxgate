@@ -9,7 +9,7 @@ export function createStore<S extends {[key: string]: any}>(
 ): IStore<S> {
   let backendState: S = {} as S;
   if (!getConfig().isBackend && storeName) {
-    backendState = (window as any).__rexStores__ && (window as any).__rexStores__[storeName] || {};
+    backendState = (window as any).__fluxgateStores__ && (window as any).__fluxgateStores__[storeName] || {};
   }
 
   let state = {...defaultState, ...backendState};
@@ -58,14 +58,6 @@ function createAction<T>(
 
   const action = (...data: any[]) => {
     store.emit(key, ...data);
-    return new Promise<any>((resolve, reject) => {
-      store.on(completedEvent(key), (result) => {
-        resolve(result);
-      });
-      store.on(failedEvent(key), (e) => {
-        reject(e);
-      });
-    });
   };
 
   Object.defineProperty(action, "name", {
