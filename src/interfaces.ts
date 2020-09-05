@@ -9,10 +9,12 @@ export interface IStore<S extends {[key: string]: any}> extends IEmitter {
   getState(): S;
 }
 
+type ReplaceReturnType<T extends (...a: any[]) => any, TNewReturn> = (...a: Parameters<T>) => TNewReturn;
+
 export interface IReducerMap {
   [key: string]: (...data: any[]) => any;
 }
 
-export type IActionMap<T> = {
-  [key in keyof T]: (...data: any[]) => void;
+export type IActionMap<T extends Record<string, (...a: any[]) => any>> = {
+  [P in keyof T]: ReplaceReturnType<T[P], void>;
 }
