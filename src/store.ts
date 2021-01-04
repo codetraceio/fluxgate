@@ -14,14 +14,15 @@ export function createStore<S extends {[key: string]: any}>(
 
   let state = {...defaultState, ...backendState};
 
-  function setState(updater: S | ((state: S) => S)) {
+  function setState(updater: Partial<S> | ((state: S) => S)) {
+    const oldState = state;
     if (typeof updater === "function") {
       state = (updater as any)(state);
     }
     if (typeof updater === "object" && typeof state === "object") {
       state = ({...state, ...updater});
     }
-    emitter.emit(CHANGE_EVENT, state);
+    emitter.emit(CHANGE_EVENT, state, oldState);
   }
 
   function getState() {
