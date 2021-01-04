@@ -5,7 +5,7 @@ export interface IEmitter {
 }
 
 export interface IStore<S extends {[key: string]: any}> extends IEmitter {
-  setState(updater: S | ((state: S) => S)): void;
+  setState(updater: Partial<S> | ((state: S) => S)): void;
   getState(): S;
 }
 
