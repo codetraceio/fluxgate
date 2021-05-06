@@ -1,12 +1,12 @@
-interface IConfig {
+interface Config {
   isBackend: boolean;
 }
 
-let config: IConfig = {
+let config: Config = {
   isBackend: false,
 };
 
-export function setConfig(newConfig: IConfig) {
+export function setConfig(newConfig: Config) {
   config = {...config, ...newConfig};
 }
 

@@ -1,9 +1,9 @@
 import { EventEmitter } from "events";
 
-import { IEmitter } from "./interfaces";
+import { Emitter } from "./interfaces";
 import { getConfig } from "./config";
 
-export function createEmitter(): IEmitter {
+export function createEmitter(): Emitter {
   if (getConfig().isBackend) {
     return {
       emit: () => {},

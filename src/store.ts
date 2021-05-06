@@ -1,12 +1,12 @@
-import { IStore, IEmitter, IReducerMap, IActionMap } from "./interfaces";
+import { Store, Emitter, ReducerMap, ActionMap } from "./interfaces";
 import { getConfig } from "./config";
 import { loadingEvent, completedEvent, CHANGE_EVENT, failedEvent } from "./events";
 
 export function createStore<S extends {[key: string]: any}>(
-  emitter: IEmitter,
+  emitter: Emitter,
   defaultState: S,
   storeName?: string,
-): IStore<S> {
+): Store<S> {
   let backendState: S = {} as S;
   if (!getConfig().isBackend && storeName) {
     backendState = (window as any).__fluxgateStores__ && (window as any).__fluxgateStores__[storeName] || {};
@@ -39,7 +39,7 @@ export function createStore<S extends {[key: string]: any}>(
 }
 
 function createAction<T>(
-  store: IStore<T>,
+  store: Store<T>,
   key: string,
   reducer: (...data: any[]) => void | Promise<any>,
 ) {
@@ -68,8 +68,8 @@ function createAction<T>(
   return action;
 }
 
-export function createActions<T extends IReducerMap, S>(store: IStore<S>, reducerMap: T): IActionMap<T> {
-  const actionMap: IActionMap<T> = {} as IActionMap<T>;
+export function createActions<T extends ReducerMap, S>(store: Store<S>, reducerMap: T): ActionMap<T> {
+  const actionMap: ActionMap<T> = {} as ActionMap<T>;
   Object.keys(reducerMap).forEach((key: keyof T) => {
     actionMap[key] = createAction<S>(store, key as string, reducerMap[key]);
   });
