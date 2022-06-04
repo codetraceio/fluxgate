@@ -2,6 +2,7 @@ export interface Emitter {
   emit(event: string, ...data: any[]): void;
   on(event: string, listener: (...data: any[]) => void): void;
   off(event: string, listener: (...data: any[]) => void): void;
+  once(event: string, listener: (...data: any[]) => void): void;
 }
 
 export interface Store<S extends {[key: string]: any}> extends Emitter {

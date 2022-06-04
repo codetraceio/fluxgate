@@ -9,6 +9,7 @@ export function createEmitter(): Emitter {
       emit: () => {},
       on: () => {},
       off: () => {},
+      once: () => {},
     }
   }
 
@@ -26,9 +27,14 @@ export function createEmitter(): Emitter {
     emitter.removeListener(event, listener);
   }
 
+  function once(event: string, listener: (...data: any[]) => void) {
+    emitter.once(event, listener);
+  }
+
   return {
     emit,
     on,
     off,
+    once,
   };
 }

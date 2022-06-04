@@ -33,6 +33,7 @@ export function createStore<S extends {[key: string]: any}>(
     emit: emitter.emit,
     on: emitter.on,
     off: emitter.off,
+    once: emitter.once,
     setState,
     getState,
   };

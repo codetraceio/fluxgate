@@ -2,6 +2,7 @@ import { createEmitter } from "../src/emitter";
 
 const addListener = jest.fn();
 const removeListener = jest.fn();
+const once = jest.fn();
 const emit = jest.fn();
 jest.mock("events", () => {
   return {
@@ -9,6 +10,7 @@ jest.mock("events", () => {
       return {
         addListener,
         removeListener,
+        once,
         emit,
       };
     }),
@@ -24,6 +26,12 @@ describe("emitter", () => {
     it("on", () => {
       const emitter = createEmitter();
       emitter.on(exampleEvent, exampleFunction);
+      expect(addListener).toHaveBeenCalledWith(exampleEvent, exampleFunction);
+    });
+
+    it("once", () => {
+      const emitter = createEmitter();
+      emitter.once(exampleEvent, exampleFunction);
       expect(addListener).toHaveBeenCalledWith(exampleEvent, exampleFunction);
     });
 
