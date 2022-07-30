@@ -1,29 +1,33 @@
-# Fluxgate - A very simple store 
+# Fluxgate - a flux store
 
-## Aritecture
+## Architecture
 
 Fluxgate consists of 2 main parts - **store** and **actions**. **Store** - contains the data and changes the data, **actions** are triggering store change. Store and actions are connected with an **event emitter**.
 
 ## Usage example
 
 ```
-import { createStore, createEmitter, createActions } from "fluxgate";
-import { useState } from "fluxgate-hooks";
 import * as React from "react";
+import { createStore, createEmitter, createActions } from "fluxgate";
+import { useState, StoreProvider } from "fluxgate-hooks";
 
-interface IUser {
+interface User {
   id: string;
   login: string;
 }
 
-interface IUserStore {
-  user: IUser;
+interface UserStore {
+  user: User;
   loading: boolean;
 }
 
+const Stores = {
+  user = "user",
+};
+
 const userEmitter = createEmitter();
 
-const userStore = createStore<IUserStore>(userEmiter, {
+const userStore = createStore<UserStore>(userEmitter, {
   user: null,
   loading: false,
 }, "user");
@@ -43,13 +47,22 @@ const userActions = createActions(userStore, {
 });
 
 function AppContainer() {
-  const userState = useStore(userStore);
+  const userState = useStore<UserStore>(Stores.user);
   
   if (userState.user) {
     return (
-      <div>
-        {user.id} {user.login}
-      </div>
+      <StoreProvider
+        stores={{
+          [Stores.user]: userStore,
+        }}
+        actions={{
+          [Stores.user]: userActions,
+        }}
+      >
+        <div>
+          {user.id} {user.login}
+        </div>
+      </StoreProvider>
     );
   }
 

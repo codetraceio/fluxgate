@@ -2,8 +2,10 @@ import { Store, Emitter, ReducerMap, ActionMap } from "./interfaces";
 import { getConfig } from "./config";
 import { loadingEvent, completedEvent, CHANGE_EVENT, failedEvent } from "./events";
 
+function noop() {}
+
 export function createStore<S extends {[key: string]: any}>(
-  emitter: Emitter,
+  emitter: Emitter | null,
   defaultState: S,
   storeName?: string,
 ): Store<S> {
@@ -22,7 +24,7 @@ export function createStore<S extends {[key: string]: any}>(
     if (typeof updater === "object" && typeof state === "object") {
       state = ({...state, ...updater});
     }
-    emitter.emit(CHANGE_EVENT, state, oldState);
+    emitter?.emit(CHANGE_EVENT, state, oldState);
   }
 
   function getState() {
@@ -30,10 +32,10 @@ export function createStore<S extends {[key: string]: any}>(
   }
 
   return {
-    emit: emitter.emit,
-    on: emitter.on,
-    off: emitter.off,
-    once: emitter.once,
+    emit: emitter?.emit || noop,
+    on: emitter?.on || noop,
+    off: emitter?.off || noop,
+    once: emitter?.once || noop,
     setState,
     getState,
   };
