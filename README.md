@@ -6,7 +6,7 @@ Fluxgate consists of 2 main parts - **store** and **actions**. **Store** - conta
 
 ## Usage example
 
-```
+```js
 import * as React from "react";
 import { createStore, createEmitter, createActions } from "fluxgate";
 import { useState, StoreProvider } from "fluxgate-hooks";
