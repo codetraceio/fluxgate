@@ -3,6 +3,10 @@ import { getConfig } from "./config";
 import { loadingEvent, completedEvent, CHANGE_EVENT, failedEvent } from "./events";
 
 function noop() {}
+type PromiseResult<T> = T extends PromiseLike<infer U> ? U : T;
+function isPromiseLike<T>(value: any): value is PromiseLike<T> {
+  return value !== null && (typeof value === "object" || typeof value === "function") && typeof value.then === "function";
+}
 
 export function createStore<S extends {[key: string]: any}>(
   emitter: Emitter | null,
@@ -41,27 +45,31 @@ export function createStore<S extends {[key: string]: any}>(
   };
 }
 
-function createAction<T>(
+function createAction<T, R extends (...data: any[]) => any>(
   store: Store<T>,
   key: string,
-  reducer: (...data: any[]) => void | Promise<any>,
-) {
-  store.on(key, (...data: any[]) => {
-    const promise = reducer(...data);
-    if (promise instanceof Promise) {
-      store.emit(loadingEvent(key));
-      promise.then((result) => {
-        store.emit(completedEvent(key), result);
-      }).catch((e) => {
-        store.emit(failedEvent(key), e);
-      });
-    } else {
-      store.emit(completedEvent(key), promise);
+  reducer: R,
+): (...data: Parameters<R>) => Promise<PromiseResult<ReturnType<R>>> {
+  const action = (...data: Parameters<R>): Promise<PromiseResult<ReturnType<R>>> => {
+    try {
+      store.emit(key, ...data);
+      const result = reducer(...data);
+      if (isPromiseLike(result)) {
+        store.emit(loadingEvent(key));
+        return Promise.resolve(result).then((resolved) => {
+          store.emit(completedEvent(key), resolved);
+          return resolved;
+        }).catch((e) => {
+          store.emit(failedEvent(key), e);
+          throw e;
+        }) as Promise<PromiseResult<ReturnType<R>>>;
+      }
+      store.emit(completedEvent(key), result);
+      return Promise.resolve(result as PromiseResult<ReturnType<R>>);
+    } catch (e) {
+      store.emit(failedEvent(key), e);
+      return Promise.reject(e);
     }
-  });
-
-  const action = (...data: any[]) => {
-    store.emit(key, ...data);
   };
 
   Object.defineProperty(action, "name", {
@@ -73,8 +81,9 @@ function createAction<T>(
 
 export function createActions<T extends ReducerMap, S>(store: Store<S>, reducerMap: T): ActionMap<T> {
   const actionMap: ActionMap<T> = {} as ActionMap<T>;
-  Object.keys(reducerMap).forEach((key: keyof T) => {
-    actionMap[key] = createAction<S>(store, key as string, reducerMap[key]);
+  (Object.keys(reducerMap) as Array<keyof T>).forEach((key) => {
+    const reducer = reducerMap[key];
+    actionMap[key] = createAction<S, typeof reducer>(store, key as string, reducer) as ActionMap<T>[typeof key];
   });
   return actionMap;
 }

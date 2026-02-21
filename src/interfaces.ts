@@ -11,11 +11,12 @@ export interface Store<S extends {[key: string]: any}> extends Emitter {
 }
 
 type ReplaceReturn<T extends (...a: any[]) => any, NewReturn> = (...a: Parameters<T>) => NewReturn;
+type PromiseResult<T> = T extends PromiseLike<infer U> ? U : T;
 
 export interface ReducerMap {
   [key: string]: (...data: any[]) => any;
 }
 
 export type ActionMap<T extends Record<string, (...a: any[]) => any>> = {
-  [P in keyof T]: ReplaceReturn<T[P], void>;
+  [P in keyof T]: ReplaceReturn<T[P], Promise<PromiseResult<ReturnType<T[P]>>>>;
 }
